@@ -13,6 +13,8 @@ app.use(express.json())
  * POST /pokemons {id: 1, pokemon: 'Bulbizar'}
  */
 app.post('/pokemons', function (req, res) {
+  // Récupérer le body avec
+  const pokemon = req.body
 })
  
 /**
@@ -26,21 +28,23 @@ app.get('/pokemons', function (req, res) {
  * Récupérer le pokémon X (READ)
  * GET /pokemon/1
  */
-app.get('/pokemon/:id', function (req, res) {
+app.get('/pokemons/:id', function (req, res) {
+  // Récupérer l'identifiant avec
+  const index = req.params.id
 })
 
 /**
  * Mettre a jour le pokémon X (Update)
  * PUT /pokemon/1 {nom: 'Bulbizar'}
  */
-app.put('/pokemon/:id', function (req, res) {
+app.put('/pokemons/:id', function (req, res) {
 })
 
 /**
  * Supprimer le pokemon X (Delete)
  * DELETE /pokemon/1
  */
-app.delete('/pokemon/:id', function (req, res) {
+app.delete('/pokemons/:id', function (req, res) {
 })
 
 app.listen(port, () => {
