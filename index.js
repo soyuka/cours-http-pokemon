@@ -1,8 +1,8 @@
 const express = require('express')
 
 const app = express()
-const data = []
  
+app.set('data', [])
 app.use(express.static('public'))
 app.use(express.json())
 
@@ -13,6 +13,7 @@ app.use(express.json())
 app.post('/pokemons', function (req, res) {
   // Récupérer le body avec
   const pokemon = req.body
+  const data = app.get('data')
   data.push(pokemon)
 
   res.status(201).json(pokemon).end()
@@ -23,6 +24,7 @@ app.post('/pokemons', function (req, res) {
  * GET /pokemons
  */
 app.get('/pokemons', function (req, res) {
+  const data = app.get('data')
   res.status(200).json(data).end()
 })
 
@@ -33,6 +35,7 @@ app.get('/pokemons', function (req, res) {
 app.get('/pokemons/:id', function (req, res) {
   // Récupérer l'identifiant avec
   const id = req.params.id
+  const data = app.get('data')
   const pokemon = data.find(function(pokemon) {
     return pokemon.id === parseInt(id)
   })
@@ -45,6 +48,7 @@ app.get('/pokemons/:id', function (req, res) {
  * PUT /pokemon/1 {nom: 'Bulbizar'}
  */
 app.put('/pokemons/:id', function (req, res) {
+  const data = app.get('data')
   const index = data.findIndex(function(pokemon) {
     return pokemon.id === parseInt(req.params.id)
   })
@@ -59,6 +63,7 @@ app.put('/pokemons/:id', function (req, res) {
  * DELETE /pokemons/1
  */
 app.delete('/pokemons/:id', function (req, res) {
+  const data = app.get('data')
   // Récupérer l'identifiant avec
   const id = req.params.id
   const index = data.findIndex(function(pokemon) {
@@ -70,9 +75,3 @@ app.delete('/pokemons/:id', function (req, res) {
 })
 
 module.exports = app
-
-
-
-
-
-
