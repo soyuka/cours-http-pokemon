@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('.')
+const app = require('..')
 const assert = require('assert')
 
 describe('API Pokemon', function() {
@@ -23,6 +23,18 @@ describe('API Pokemon', function() {
       .get('/pokemons')
       .end(function (err, res) {
         assert.deepStrictEqual(data, res.body)
+        done()
+      })
+  })
+
+  it('should get pokemons in HTML when calling GET /pokemons', function(done) {
+    const data = [{id: 1, name: 'mew'}]
+    app.set('data', data)
+    request(app)
+      .get('/pokemons')
+      .set('Accept', 'text/html')
+      .end(function (err, res) {
+        assert.match(res.text, /<li>mew<\/li>/);
         done()
       })
   })
@@ -52,4 +64,29 @@ describe('API Pokemon', function() {
       })
   })
 
+  it('should update a pokemon when calling PUT /pokemons/:id', function(done) {
+    const data = [{id: 1, name: 'mew'}, {id: 3, name: 'mewtwo'}]
+    app.set('data', data)
+    request(app)
+      .put('/pokemons/3')
+      .send({id: 3, name: 'Salameche'})
+      .set('Content-Type', 'application/json')
+      .end(function(err, res) {
+        const pokemon = data.find(function(pokemon) {
+          return pokemon.id === 3
+        })
+
+        assert.strictEqual('Salameche', pokemon.name)
+        done()
+      })
+  })
+
+  it('should update a pokemon when calling PUT /pokemons/:id', function(done) {
+    const data = [{id: 1, name: 'mew'}, {id: 3, name: 'mewtwo'}]
+    app.set('data', data)
+    request(app)
+      .put('/pokemons/quinexistepas')
+      .set('Content-Type', 'application/json')
+      .end(done)
+  })
 })

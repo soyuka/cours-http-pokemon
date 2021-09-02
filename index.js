@@ -2,7 +2,7 @@ const express = require('express')
 
 const app = express()
  
-app.set('data', [])
+app.set('data', [{id: 1, name: 'mew'}, {id: 2, name: 'mewtwo'}, {id: 3, name: 'salameche'}])
 app.use(express.static('public'))
 app.use(express.json())
 
@@ -25,7 +25,18 @@ app.post('/pokemons', function (req, res) {
  */
 app.get('/pokemons', function (req, res) {
   const data = app.get('data')
-  res.status(200).json(data).end()
+  res.status(200)
+
+  res.format({
+    json: function() {
+      res.send(data)
+    },
+    html: function() {
+      res.send(`<ul>
+        ${data.map(pokemon => `<li>${pokemon.name}</li>`).join('')}
+      </ul>`)
+    }
+  })
 })
 
 /**
@@ -53,9 +64,13 @@ app.put('/pokemons/:id', function (req, res) {
     return pokemon.id === parseInt(req.params.id)
   })
 
+  if (index === -1) {
+    return res.status(404).end()
+  }
+
   data[index] = req.body
 
-  res.status(200).end()
+  res.json(data[index]).status(200).end()
 })
 
 /**
