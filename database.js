@@ -7,6 +7,10 @@ function Database(db) {
     return await db.get(id)
   }
 
+  async function del(id) {
+    await db.delete(id)
+  }
+
   async function getAll() {
     const all = await db.all()
     const data = []
@@ -20,7 +24,7 @@ function Database(db) {
     // return Object.keys(all).map(id => all[id])
   }
 
-  return {put, get, getAll}
+  return {put, get, getAll, del}
 }
 
 module.exports = Database
